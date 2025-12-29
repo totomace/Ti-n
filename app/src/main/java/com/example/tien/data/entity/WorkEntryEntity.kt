@@ -13,7 +13,8 @@ data class WorkEntryEntity(
     val endTime: String, // HH:mm
     val breakMinutes: Int,
     val task: String,
-    val salary: Long
+    val salary: Long,
+    val isPaid: Boolean = false
 )
 
 // Mapping functions
@@ -25,7 +26,8 @@ fun WorkEntryEntity.toDomain(): com.example.tien.domain.model.WorkEntry =
         endTime = LocalTime.parse(endTime),
         breakMinutes = breakMinutes,
         task = task,
-        salary = salary
+        salary = salary,
+        isPaid = isPaid
     )
 
 fun com.example.tien.domain.model.WorkEntry.toEntity(): WorkEntryEntity =
@@ -36,5 +38,6 @@ fun com.example.tien.domain.model.WorkEntry.toEntity(): WorkEntryEntity =
         endTime = endTime.toString(),
         breakMinutes = breakMinutes,
         task = task,
-        salary = salary
+        salary = salary,
+        isPaid = isPaid
     )

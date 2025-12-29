@@ -15,7 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.List
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +52,7 @@ fun WorkEntryForm(
                 ),
                 actions = {
                     IconButton(onClick = onViewHistory) {
-                        Icon(Icons.Filled.History, "Xem lịch sử", tint = Color.White)
+                        Icon(Icons.Filled.List, "Lịch sử", tint = Color.White)
                     }
                 }
             )

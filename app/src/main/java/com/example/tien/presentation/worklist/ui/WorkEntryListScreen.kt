@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,7 +32,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun WorkEntryListScreen(
     viewModel: com.example.tien.presentation.worklist.WorkEntryListViewModel,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onStatisticsClick: () -> Unit
 ) {
     val entries = viewModel.entries.collectAsState().value
     
@@ -42,7 +44,12 @@ fun WorkEntryListScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = PrimaryBlue,
                     titleContentColor = Color.White
-                )
+                ),
+                actions = {
+                    IconButton(onClick = onStatisticsClick) {
+                        Icon(Icons.Filled.BarChart, "Thống kê", tint = Color.White)
+                    }
+                }
             )
         },
         floatingActionButton = {

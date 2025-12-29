@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.tien.data.dao.WorkEntryDao
 import com.example.tien.data.entity.WorkEntryEntity
 
-@Database(entities = [WorkEntryEntity::class], version = 1, exportSchema = false)
+@Database(entities = [WorkEntryEntity::class], version = 2, exportSchema = false)
 abstract class WorkEntryDatabase : RoomDatabase() {
     abstract fun workEntryDao(): WorkEntryDao
 
@@ -20,7 +20,7 @@ abstract class WorkEntryDatabase : RoomDatabase() {
                     context.applicationContext,
                     WorkEntryDatabase::class.java,
                     "work_entry_db"
-                ).build().also { INSTANCE = it }
+                ).fallbackToDestructiveMigration().build().also { INSTANCE = it }
             }
     }
 }

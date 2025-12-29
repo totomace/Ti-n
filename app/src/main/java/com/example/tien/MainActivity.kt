@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tien.data.WorkEntryDatabase
@@ -48,17 +50,26 @@ fun WorkEntryApp() {
         }
     )
     
-    if (showList) {
-        WorkEntryListScreen(
-            viewModel = listViewModel,
-            onAddClick = { showList = false }
-        )
-    } else {
-        com.example.tien.presentation.workentry.ui.WorkEntryScreen(
-            onViewHistory = { 
-                listViewModel.loadEntries() // Reload when coming back
-                showList = true
-            }
-        )
+    AnimatedContent(
+        targetState = showList,
+        transitionSpec = {
+            fadeIn(animationSpec = tween(400)) togetherWith
+                    fadeOut(animationSpec = tween(400))
+        },
+        label = "screen_transition"
+    ) { isShowingList ->
+        if (isShowingList) {
+            WorkEntryListScreen(
+                viewModel = listViewModel,
+                onAddClick = { showList = false }
+            )
+        } else {
+            com.example.tien.presentation.workentry.ui.WorkEntryScreen(
+                onViewHistory = { 
+                    listViewModel.loadEntries() // Reload when coming back
+                    showList = true
+                }
+            )
+        }
     }
 }

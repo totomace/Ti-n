@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tien.ui.theme.PrimaryBlue
@@ -61,6 +62,7 @@ fun WorkEntryForm(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
@@ -143,7 +145,10 @@ fun WorkEntryForm(
         OutlinedTextField(
             value = state.task,
             onValueChange = onTaskChange,
-            label = { Text("Làm khâu gì") },
+            label = { Text("Công việc") },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words
+            ),
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
         )
         // Salary

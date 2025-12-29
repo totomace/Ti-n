@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -33,6 +34,7 @@ import java.time.format.DateTimeFormatter
 fun WorkEntryListScreen(
     viewModel: com.example.tien.presentation.worklist.WorkEntryListViewModel,
     onAddClick: () -> Unit,
+    onEditClick: (WorkEntry) -> Unit,
     onStatisticsClick: () -> Unit
 ) {
     val entries = viewModel.entries.collectAsState().value
@@ -87,6 +89,7 @@ fun WorkEntryListScreen(
                 items(entries) { entry ->
                     WorkEntryCard(
                         entry = entry,
+                        onEdit = { onEditClick(entry) },
                         onDelete = { viewModel.deleteEntry(entry.id) }
                     )
                 }
@@ -97,7 +100,7 @@ fun WorkEntryListScreen(
 }
 
 @Composable
-fun WorkEntryCard(entry: WorkEntry, onDelete: () -> Unit) {
+fun WorkEntryCard(entry: WorkEntry, onEdit: () -> Unit, onDelete: () -> Unit) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     
     if (showDeleteDialog) {
@@ -125,10 +128,12 @@ fun WorkEntryCard(entry: WorkEntry, onDelete: () -> Unit) {
     }
     
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onEdit() },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier

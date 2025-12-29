@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tien.data.WorkEntryDatabase
 import com.example.tien.data.repository.RoomWorkEntryRepository
+import com.example.tien.domain.model.WorkEntry
 import com.example.tien.domain.usecase.GetWorkEntriesUseCase
 import com.example.tien.domain.usecase.DeleteWorkEntryUseCase
 import com.example.tien.domain.usecase.UpdatePaymentStatusUseCase
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WorkEntryApp() {
     var currentScreen by remember { mutableStateOf("list") } // "list", "form", "stats"
+    var entryToEdit by remember { mutableStateOf<WorkEntry?>(null) }
     val context = LocalContext.current.applicationContext as Application
     val db = remember(context) { WorkEntryDatabase.getInstance(context) }
     val repository = remember(db) { RoomWorkEntryRepository(db.workEntryDao()) }
@@ -78,7 +80,14 @@ fun WorkEntryApp() {
             "list" -> {
                 WorkEntryListScreen(
                     viewModel = listViewModel,
-                    onAddClick = { currentScreen = "form" },
+                    onAddClick = { 
+                        entryToEdit = null
+                        currentScreen = "form" 
+                    },
+                    onEditClick = { entry ->
+                        entryToEdit = entry
+                        currentScreen = "form"
+                    },
                     onStatisticsClick = { 
                         statsViewModel.loadStatistics()
                         currentScreen = "stats" 
@@ -87,8 +96,10 @@ fun WorkEntryApp() {
             }
             "form" -> {
                 com.example.tien.presentation.workentry.ui.WorkEntryScreen(
+                    entryToEdit = entryToEdit,
                     onViewHistory = { 
                         listViewModel.loadEntries()
+                        entryToEdit = null
                         currentScreen = "list"
                     }
                 )

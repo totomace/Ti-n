@@ -47,7 +47,7 @@ class WorkEntryFormViewModel(
         _formState.value = _formState.value.copy(salary = value)
     }
 
-    fun submit(isEdit: Boolean = false, onSuccess: () -> Unit = {}) {
+    fun submit(onSuccess: () -> Unit = {}) {
         val entry = WorkEntry(
             id = _formState.value.id,
             date = _formState.value.date,
@@ -55,7 +55,8 @@ class WorkEntryFormViewModel(
             endTime = _formState.value.endTime,
             breakMinutes = _formState.value.breakMinutes,
             task = _formState.value.task,
-            salary = _formState.value.salary
+            salary = _formState.value.salary,
+            isPaid = _formState.value.isPaid
         )
         val validation: ValidationResult = validateWorkEntry(entry)
         if (!validation.isValid) {
@@ -63,14 +64,31 @@ class WorkEntryFormViewModel(
             return
         }
         viewModelScope.launch {
-            if (isEdit) {
-                editWorkEntry(entry)
-            } else {
+            if (_formState.value.id == 0L) {
                 addWorkEntry(entry)
+            } else {
+                editWorkEntry(entry)
             }
             _formState.value = FormState() // Reset form
             onSuccess()
         }
+    }
+
+    fun loadEntry(entry: WorkEntry) {
+        _formState.value = FormState(
+            id = entry.id,
+            date = entry.date,
+            startTime = entry.startTime,
+            endTime = entry.endTime,
+            breakMinutes = entry.breakMinutes,
+            task = entry.task,
+            salary = entry.salary,
+            isPaid = entry.isPaid
+        )
+    }
+
+    fun resetForm() {
+        _formState.value = FormState()
     }
 
     data class FormState(
@@ -81,6 +99,7 @@ class WorkEntryFormViewModel(
         val breakMinutes: Int = 0,
         val task: String = "",
         val salary: Long = 0L,
+        val isPaid: Boolean = false,
         val error: String? = null
     )
 }

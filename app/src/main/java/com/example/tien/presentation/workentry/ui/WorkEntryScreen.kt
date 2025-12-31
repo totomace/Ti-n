@@ -53,6 +53,8 @@ fun WorkEntryScreen(
         onBreakMinutesChange = viewModel::onBreakMinutesChange,
         onTaskChange = viewModel::onTaskChange,
         onSalaryChange = viewModel::onSalaryChange,
+        onPaidAmountChange = viewModel::onPaidAmountChange,
+        onNotesChange = viewModel::onNotesChange,
         onSubmit = { viewModel.submit(onSuccess = onViewHistory) },
         onViewHistory = onViewHistory
     )

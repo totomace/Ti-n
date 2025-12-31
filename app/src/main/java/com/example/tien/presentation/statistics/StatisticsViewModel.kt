@@ -24,6 +24,9 @@ class StatisticsViewModel(
     var monthlyStats by mutableStateOf<List<MonthStat>>(emptyList())
         private set
 
+    var yearlyStats by mutableStateOf<List<YearStat>>(emptyList())
+        private set
+
     init {
         loadStatistics()
     }
@@ -48,8 +51,8 @@ class StatisticsViewModel(
                     endDate = sortedEntries.last().date,
                     entries = weekEntries.sortedByDescending { it.date },
                     totalSalary = weekEntries.sumOf { it.salary },
-                    paidSalary = weekEntries.filter { it.isPaid }.sumOf { it.salary },
-                    unpaidCount = weekEntries.count { !it.isPaid }
+                    paidSalary = weekEntries.sumOf { it.paidAmount },
+                    unpaidCount = weekEntries.count { it.paidAmount < it.salary }
                 )
             }.sortedByDescending { it.weekLabel }
 
@@ -66,16 +69,31 @@ class StatisticsViewModel(
                     year = parts[0].toInt(),
                     entries = monthEntries.sortedByDescending { it.date },
                     totalSalary = monthEntries.sumOf { it.salary },
-                    paidSalary = monthEntries.filter { it.isPaid }.sumOf { it.salary },
-                    unpaidCount = monthEntries.count { !it.isPaid }
+                    paidSalary = monthEntries.sumOf { it.paidAmount },
+                    unpaidCount = monthEntries.count { it.paidAmount < it.salary }
                 )
             }.sortedByDescending { it.monthLabel }
+
+            // Group by year
+            val yearGroups = entries.groupBy { entry ->
+                entry.date.year
+            }
+            
+            yearlyStats = yearGroups.map { (year, yearEntries) ->
+                YearStat(
+                    year = year,
+                    entries = yearEntries.sortedByDescending { it.date },
+                    totalSalary = yearEntries.sumOf { it.salary },
+                    paidSalary = yearEntries.sumOf { it.paidAmount },
+                    unpaidCount = yearEntries.count { it.paidAmount < it.salary }
+                )
+            }.sortedByDescending { it.year }
         }
     }
 
-    fun togglePaymentStatus(id: Long, isPaid: Boolean) {
+    fun updatePaidAmount(id: Long, paidAmount: Long) {
         viewModelScope.launch {
-            updatePaymentStatus(id, isPaid)
+            updatePaymentStatus(id, paidAmount)
             loadStatistics()
         }
     }
@@ -94,6 +112,14 @@ data class WeekStat(
 data class MonthStat(
     val monthLabel: String,
     val month: Int,
+    val year: Int,
+    val entries: List<WorkEntry>,
+    val totalSalary: Long,
+    val paidSalary: Long,
+    val unpaidCount: Int
+)
+
+data class YearStat(
     val year: Int,
     val entries: List<WorkEntry>,
     val totalSalary: Long,

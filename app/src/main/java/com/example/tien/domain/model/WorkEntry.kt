@@ -14,5 +14,7 @@ data class WorkEntry(
     val breakMinutes: Int,
     val task: String,
     val salary: Long,
-    val isPaid: Boolean = false
+    val isPaid: Boolean = false,
+    val paidAmount: Long = 0L,
+    val notes: String = ""
 )

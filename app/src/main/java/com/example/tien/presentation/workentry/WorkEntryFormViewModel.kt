@@ -47,6 +47,15 @@ class WorkEntryFormViewModel(
         _formState.value = _formState.value.copy(salary = value)
     }
 
+    fun onPaidAmountChange(amount: String) {
+        val value = amount.toLongOrNull() ?: 0L
+        _formState.value = _formState.value.copy(paidAmount = value)
+    }
+
+    fun onNotesChange(notes: String) {
+        _formState.value = _formState.value.copy(notes = notes)
+    }
+
     fun submit(onSuccess: () -> Unit = {}) {
         val entry = WorkEntry(
             id = _formState.value.id,
@@ -56,7 +65,9 @@ class WorkEntryFormViewModel(
             breakMinutes = _formState.value.breakMinutes,
             task = _formState.value.task,
             salary = _formState.value.salary,
-            isPaid = _formState.value.isPaid
+            isPaid = _formState.value.paidAmount >= _formState.value.salary,
+            paidAmount = _formState.value.paidAmount,
+            notes = _formState.value.notes
         )
         val validation: ValidationResult = validateWorkEntry(entry)
         if (!validation.isValid) {
@@ -83,7 +94,9 @@ class WorkEntryFormViewModel(
             breakMinutes = entry.breakMinutes,
             task = entry.task,
             salary = entry.salary,
-            isPaid = entry.isPaid
+            isPaid = entry.isPaid,
+            paidAmount = entry.paidAmount,
+            notes = entry.notes
         )
     }
 
@@ -99,7 +112,9 @@ class WorkEntryFormViewModel(
         val breakMinutes: Int = 0,
         val task: String = "",
         val salary: Long = 0L,
+        val paidAmount: Long = 0L,
         val isPaid: Boolean = false,
+        val notes: String = "",
         val error: String? = null
     )
 }

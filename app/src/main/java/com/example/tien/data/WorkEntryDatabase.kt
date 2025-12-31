@@ -5,11 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.tien.data.dao.WorkEntryDao
+import com.example.tien.data.dao.NoteDao
 import com.example.tien.data.entity.WorkEntryEntity
+import com.example.tien.data.entity.NoteEntity
 
-@Database(entities = [WorkEntryEntity::class], version = 2, exportSchema = false)
+@Database(entities = [WorkEntryEntity::class, NoteEntity::class], version = 5, exportSchema = false)
 abstract class WorkEntryDatabase : RoomDatabase() {
     abstract fun workEntryDao(): WorkEntryDao
+    abstract fun noteDao(): NoteDao
 
     companion object {
         @Volatile private var INSTANCE: WorkEntryDatabase? = null

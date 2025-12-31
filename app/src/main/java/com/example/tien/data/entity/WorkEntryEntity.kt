@@ -14,7 +14,9 @@ data class WorkEntryEntity(
     val breakMinutes: Int,
     val task: String,
     val salary: Long,
-    val isPaid: Boolean = false
+    val isPaid: Boolean = false,
+    val paidAmount: Long = 0L,
+    val notes: String = ""
 )
 
 // Mapping functions
@@ -27,7 +29,9 @@ fun WorkEntryEntity.toDomain(): com.example.tien.domain.model.WorkEntry =
         breakMinutes = breakMinutes,
         task = task,
         salary = salary,
-        isPaid = isPaid
+        isPaid = isPaid,
+        paidAmount = paidAmount,
+        notes = notes
     )
 
 fun com.example.tien.domain.model.WorkEntry.toEntity(): WorkEntryEntity =
@@ -39,5 +43,7 @@ fun com.example.tien.domain.model.WorkEntry.toEntity(): WorkEntryEntity =
         breakMinutes = breakMinutes,
         task = task,
         salary = salary,
-        isPaid = isPaid
+        isPaid = isPaid,
+        paidAmount = paidAmount,
+        notes = notes
     )

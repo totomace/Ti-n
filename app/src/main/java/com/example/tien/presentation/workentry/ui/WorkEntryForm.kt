@@ -2,6 +2,8 @@
 package com.example.tien.presentation.workentry.ui
 
 import com.example.tien.presentation.workentry.WorkEntryFormViewModel
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,12 +14,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -25,8 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tien.ui.theme.PrimaryBlue
 import com.example.tien.ui.theme.AccentGreen
+import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Locale
 
 @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +46,8 @@ fun WorkEntryForm(
     onBreakMinutesChange: (String) -> Unit,
     onTaskChange: (String) -> Unit,
     onSalaryChange: (String) -> Unit,
+    onPaidAmountChange: (String) -> Unit,
+    onNotesChange: (String) -> Unit,
     onSubmit: () -> Unit,
     onViewHistory: () -> Unit,
     onSaveSuccess: () -> Unit = {}
@@ -45,7 +55,20 @@ fun WorkEntryForm(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Nhập liệu thủ công", fontWeight = FontWeight.Bold) },
+                title = { 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Text("Nhập liệu thủ công", fontWeight = FontWeight.Bold)
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = PrimaryBlue,
                     titleContentColor = Color.White
@@ -58,14 +81,25 @@ fun WorkEntryForm(
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .imePadding()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+        var visible by remember { mutableStateOf(false) }
+        
+        LaunchedEffect(Unit) {
+            visible = true
+        }
+        
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn(animationSpec = tween(600)) + 
+                    slideInVertically(animationSpec = tween(600)) { it / 4 }
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .imePadding()
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp)
+            ) {
             var showDatePicker by remember { mutableStateOf(false) }
             var showStartTimePicker by remember { mutableStateOf(false) }
             var showEndTimePicker by remember { mutableStateOf(false) }
@@ -159,20 +193,73 @@ fun WorkEntryForm(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
         )
+        // Paid Amount
+        OutlinedTextField(
+            value = if (state.paidAmount == 0L) "" else state.paidAmount.toString(),
+            onValueChange = onPaidAmountChange,
+            label = { Text("Đã trả") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        )
+        
+        // Notes
+        OutlinedTextField(
+            value = state.notes,
+            onValueChange = onNotesChange,
+            label = { Text("Ghi chú") },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences
+            ),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+            minLines = 3,
+            maxLines = 5
+        )
+        
+        // Show remaining amount if partially paid
+        if (state.paidAmount > 0 && state.paidAmount < state.salary) {
+            val remaining = state.salary - state.paidAmount
+            val formatter = NumberFormat.getNumberInstance(Locale("vi", "VN"))
+            Text(
+                "Còn nợ: ${formatter.format(remaining)} VNĐ",
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+        
         // Error
         state.error?.let {
             Text(text = it, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
         }
         // Submit Button
+        val buttonScale = remember { Animatable(0.9f) }
+        
+        LaunchedEffect(Unit) {
+            buttonScale.animateTo(
+                targetValue = 1f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
+        }
+        
         Button(
             onClick = onSubmit,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    scaleX = buttonScale.value
+                    scaleY = buttonScale.value
+                },
             colors = ButtonDefaults.buttonColors(
                 containerColor = AccentGreen
             )
         ) {
             Text("Lưu", fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
+            }
         }
     }
 }

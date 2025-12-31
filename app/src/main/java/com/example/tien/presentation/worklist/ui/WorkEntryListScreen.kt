@@ -423,22 +423,63 @@ fun WorkEntryCard(entry: WorkEntry, onEdit: () -> Unit, onDelete: () -> Unit) {
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Xác nhận xóa") },
-            text = { Text("Bạn có chắc muốn xóa bản ghi này không?") },
+            containerColor = Color(0xFFFFFBF0),
+            shape = RoundedCornerShape(16.dp),
+            title = { 
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Delete,
+                        contentDescription = null,
+                        tint = Color(0xFFDC2626),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Text(
+                        "Xác nhận xóa",
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFDC2626)
+                    )
+                }
+            },
+            text = { 
+                Text(
+                    "Bạn có chắc muốn xóa bản ghi này không?",
+                    color = Color(0xFF92400E)
+                ) 
+            },
             confirmButton = {
                 Button(
                     onClick = {
                         onDelete()
                         showDeleteDialog = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDC2626)),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Xóa")
+                    Icon(
+                        Icons.Filled.Delete,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Xóa", fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Hủy")
+                TextButton(
+                    onClick = { showDeleteDialog = false },
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Close,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = Color(0xFF92400E)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Hủy", color = Color(0xFF92400E))
                 }
             }
         )

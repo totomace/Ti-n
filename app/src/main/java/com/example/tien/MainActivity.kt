@@ -3,6 +3,7 @@ package com.example.tien
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
@@ -142,6 +143,11 @@ fun WorkEntryApp() {
                 )
             }
             "form" -> {
+                BackHandler {
+                    listViewModel.loadEntries()
+                    entryToEdit = null
+                    currentScreen = "list"
+                }
                 com.example.tien.presentation.workentry.ui.WorkEntryScreen(
                     entryToEdit = entryToEdit,
                     onViewHistory = { 
@@ -152,18 +158,21 @@ fun WorkEntryApp() {
                 )
             }
             "stats" -> {
+                BackHandler { currentScreen = "list" }
                 StatisticsScreen(
                     viewModel = statsViewModel,
                     onBackClick = { currentScreen = "list" }
                 )
             }
             "settings" -> {
+                BackHandler { currentScreen = "list" }
                 SettingsScreen(
                     viewModel = settingsViewModel,
                     onBackClick = { currentScreen = "list" }
                 )
             }
             "notes" -> {
+                BackHandler { currentScreen = "list" }
                 com.example.tien.presentation.notes.ui.NotesScreen(
                     onBack = { currentScreen = "list" }
                 )

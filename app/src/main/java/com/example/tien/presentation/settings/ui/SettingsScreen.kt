@@ -593,67 +593,58 @@ fun AboutDialog(
         shape = RoundedCornerShape(16.dp),
         icon = {
             Icon(
-                Icons.Filled.Info,
+                Icons.Filled.AccountCircle,
                 contentDescription = null,
                 tint = Color(0xFFFBBF24),
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(56.dp)
             )
         },
         title = {
-            Text(
-                "Công Việc Của Tôi",
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFFD97706),
-                fontSize = 20.sp
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    "Công Việc Của Tôi",
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFD97706),
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    "Phiên bản 1.0.0",
+                    color = Color(0xFF92400E),
+                    fontSize = 14.sp
+                )
+            }
         },
         text = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text(
-                    "Phiên bản 1.0.0",
-                    color = Color(0xFF92400E),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                
-                Spacer(modifier = Modifier.height(4.dp))
+                HorizontalDivider(color = Color(0xFFFBBF24).copy(alpha = 0.3f))
                 
                 Text(
                     "Ứng dụng quản lý công việc và thu nhập cá nhân",
-                    color = Color(0xFFB45309),
+                    color = Color(0xFF92400E),
                     fontSize = 14.sp,
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    modifier = Modifier.padding(horizontal = 8.dp)
                 )
-                
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                HorizontalDivider(
-                    color = Color(0xFFFBBF24).copy(alpha = 0.3f),
-                    thickness = 1.dp
-                )
-                
-                Spacer(modifier = Modifier.height(4.dp))
                 
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier.fillMaxWidth()
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    InfoRow(icon = Icons.Filled.Check, text = "Quản lý lịch sử công việc")
-                    InfoRow(icon = Icons.Filled.Check, text = "Theo dõi thu nhập")
-                    InfoRow(icon = Icons.Filled.Check, text = "Thống kê chi tiết")
-                    InfoRow(icon = Icons.Filled.Check, text = "Ghi chú nhanh")
-                    InfoRow(icon = Icons.Filled.Check, text = "Chế độ sáng/tối")
+                    AboutInfoRow(Icons.Filled.Code, "Phát triển bởi: Bạn")
+                    AboutInfoRow(Icons.Filled.CalendarToday, "Năm phát hành: 2026")
+                    AboutInfoRow(Icons.Filled.Android, "Nền tảng: Android")
                 }
                 
-                Spacer(modifier = Modifier.height(8.dp))
+                HorizontalDivider(color = Color(0xFFFBBF24).copy(alpha = 0.3f))
                 
                 Text(
-                    "© 2026 - Made with ❤️",
+                    "© 2026 All Rights Reserved",
                     color = Color(0xFFB45309),
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
         },
@@ -665,6 +656,12 @@ fun AboutDialog(
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
+                Icon(
+                    Icons.Filled.Check,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
                 Text("Đóng", fontWeight = FontWeight.Bold)
             }
         }
@@ -672,7 +669,7 @@ fun AboutDialog(
 }
 
 @Composable
-fun InfoRow(icon: ImageVector, text: String) {
+fun AboutInfoRow(icon: ImageVector, text: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -681,13 +678,13 @@ fun InfoRow(icon: ImageVector, text: String) {
         Icon(
             icon,
             contentDescription = null,
-            tint = Color(0xFF15803D),
-            modifier = Modifier.size(18.dp)
+            tint = Color(0xFFF59E0B),
+            modifier = Modifier.size(20.dp)
         )
         Text(
             text,
             color = Color(0xFF92400E),
-            fontSize = 13.sp
+            fontSize = 14.sp
         )
     }
 }

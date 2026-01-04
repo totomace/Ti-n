@@ -36,6 +36,7 @@ fun SettingsScreen(
     var showThemeDialog by remember { mutableStateOf(false) }
     var showComingSoonDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
+    var showFeedbackDialog by remember { mutableStateOf(false) }
     var comingSoonFeature by remember { mutableStateOf("") }
 
     Scaffold(
@@ -289,10 +290,7 @@ fun SettingsScreen(
                     icon = Icons.Filled.BugReport,
                     title = "Báo lỗi",
                     subtitle = "Gửi phản hồi",
-                    onClick = { 
-                        comingSoonFeature = "Báo lỗi"
-                        showComingSoonDialog = true 
-                    }
+                    onClick = { showFeedbackDialog = true }
                 )
             }
         }
@@ -318,6 +316,12 @@ fun SettingsScreen(
         if (showAboutDialog) {
             AboutDialog(
                 onDismiss = { showAboutDialog = false }
+            )
+        }
+
+        if (showFeedbackDialog) {
+            FeedbackDialog(
+                onDismiss = { showFeedbackDialog = false }
             )
         }
     }
@@ -687,4 +691,139 @@ fun AboutInfoRow(icon: ImageVector, text: String) {
             fontSize = 14.sp
         )
     }
+}
+
+@Composable
+fun FeedbackDialog(
+    onDismiss: () -> Unit
+) {
+    val scale = remember { Animatable(0.8f) }
+    val alpha = remember { Animatable(0f) }
+    
+    LaunchedEffect(Unit) {
+        launch { scale.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy)) }
+        launch { alpha.animateTo(1f, tween(300)) }
+    }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.graphicsLayer {
+            scaleX = scale.value
+            scaleY = scale.value
+            this.alpha = alpha.value
+        },
+        containerColor = Color(0xFFFFFBF0),
+        shape = RoundedCornerShape(16.dp),
+        icon = {
+            Icon(
+                Icons.Filled.BugReport,
+                contentDescription = null,
+                tint = Color(0xFFDC2626),
+                modifier = Modifier.size(48.dp)
+            )
+        },
+        title = {
+            Text(
+                "Báo lỗi & Phản hồi",
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFD97706)
+            )
+        },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    "Bạn gặp vấn đề hoặc có ý kiến đóng góp?",
+                    color = Color(0xFF92400E),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                
+                Spacer(modifier = Modifier.height(4.dp))
+                
+                // Email contact
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFFFEF3C7))
+                        .padding(12.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Email,
+                        contentDescription = null,
+                        tint = Color(0xFFD97706),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Column {
+                        Text(
+                            "Email hỗ trợ",
+                            fontSize = 12.sp,
+                            color = Color(0xFFB45309),
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            "khanhkietbt2020@gmail.com",
+                            fontSize = 14.sp,
+                            color = Color(0xFF92400E),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                
+                // GitHub Issues
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFFFEF3C7))
+                        .padding(12.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Phone,
+                        contentDescription = null,
+                        tint = Color(0xFFD97706),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Column {
+                        Text(
+                            "Hotline hỗ trợ",
+                            fontSize = 12.sp,
+                            color = Color(0xFFB45309),
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            "0782 987 602",
+                            fontSize = 14.sp,
+                            color = Color(0xFF92400E),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                
+                Text(
+                    "Chúng tôi sẽ phản hồi trong vòng 24-48 giờ.",
+                    fontSize = 13.sp,
+                    color = Color(0xFFB45309),
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFBBF24)
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Đã hiểu", fontWeight = FontWeight.Bold)
+            }
+        }
+    )
 }

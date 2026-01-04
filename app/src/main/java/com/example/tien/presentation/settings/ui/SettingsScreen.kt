@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.animation.core.*
@@ -36,6 +37,7 @@ fun SettingsScreen(
     var showThemeDialog by remember { mutableStateOf(false) }
     var showComingSoonDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
+    var showBugReportDialog by remember { mutableStateOf(false) }
     var comingSoonFeature by remember { mutableStateOf("") }
 
     Scaffold(
@@ -289,10 +291,7 @@ fun SettingsScreen(
                     icon = Icons.Filled.BugReport,
                     title = "Báo lỗi",
                     subtitle = "Gửi phản hồi",
-                    onClick = { 
-                        comingSoonFeature = "Báo lỗi"
-                        showComingSoonDialog = true 
-                    }
+                    onClick = { showBugReportDialog = true }
                 )
             }
         }
@@ -318,6 +317,12 @@ fun SettingsScreen(
         if (showAboutDialog) {
             AboutDialog(
                 onDismiss = { showAboutDialog = false }
+            )
+        }
+
+        if (showBugReportDialog) {
+            BugReportDialog(
+                onDismiss = { showBugReportDialog = false }
             )
         }
     }
@@ -687,4 +692,129 @@ fun AboutInfoRow(icon: ImageVector, text: String) {
             fontSize = 14.sp
         )
     }
+}
+
+@Composable
+fun BugReportDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFFFFFBEB),
+        shape = RoundedCornerShape(16.dp),
+        icon = {
+            Icon(
+                Icons.Filled.BugReport,
+                contentDescription = null,
+                tint = Color(0xFFD97706),
+                modifier = Modifier.size(48.dp)
+            )
+        },
+        title = {
+            Text(
+                "Báo lỗi & Hỗ trợ",
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFD97706),
+                textAlign = TextAlign.Center
+            )
+        },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Text(
+                    "Nếu bạn gặp lỗi hoặc cần hỗ trợ, vui lòng liên hệ:",
+                    color = Color(0xFF92400E),
+                    fontSize = 14.sp
+                )
+                
+                // Email
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, RoundedCornerShape(8.dp))
+                        .padding(12.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Email,
+                        contentDescription = null,
+                        tint = Color(0xFFF59E0B),
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Column {
+                        Text(
+                            "Email",
+                            fontSize = 11.sp,
+                            color = Color(0xFF92400E),
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            "khanhkietbt20202@gmail.com",
+                            fontSize = 13.sp,
+                            color = Color(0xFF78350F),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+                
+                // Phone
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, RoundedCornerShape(8.dp))
+                        .padding(12.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Phone,
+                        contentDescription = null,
+                        tint = Color(0xFFF59E0B),
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Column {
+                        Text(
+                            "Điện thoại",
+                            fontSize = 11.sp,
+                            color = Color(0xFF92400E),
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            "0782 987 602",
+                            fontSize = 13.sp,
+                            color = Color(0xFF78350F),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+                
+                // Support time
+                Text(
+                    "⏰ Thời gian hỗ trợ: 24 - 72 giờ",
+                    fontSize = 13.sp,
+                    color = Color(0xFFDC2626),
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFBBF24)
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(
+                    Icons.Filled.Check,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text("Đóng", fontWeight = FontWeight.Bold)
+            }
+        }
+    )
 }

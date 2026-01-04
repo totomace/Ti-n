@@ -2,6 +2,7 @@
 package com.example.tien.presentation.workentry.ui
 
 import com.example.tien.presentation.workentry.WorkEntryFormViewModel
+import com.example.tien.util.CurrencyVisualTransformation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
@@ -187,18 +188,20 @@ fun WorkEntryForm(
         )
         // Salary
         OutlinedTextField(
-            value = if (state.salary == 0L) "" else state.salary.toString(),
+            value = state.salaryInput,
             onValueChange = onSalaryChange,
             label = { Text("Tiền lương") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            visualTransformation = CurrencyVisualTransformation(),
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
         )
         // Paid Amount
         OutlinedTextField(
-            value = if (state.paidAmount == 0L) "" else state.paidAmount.toString(),
+            value = state.paidAmountInput,
             onValueChange = onPaidAmountChange,
             label = { Text("Đã trả") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            visualTransformation = CurrencyVisualTransformation(),
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
         )
         

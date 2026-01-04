@@ -7,6 +7,7 @@ import com.example.tien.domain.usecase.AddWorkEntryUseCase
 import com.example.tien.domain.usecase.EditWorkEntryUseCase
 import com.example.tien.domain.usecase.ValidateWorkEntryUseCase
 import com.example.tien.domain.usecase.ValidationResult
+import com.example.tien.util.CurrencyInputFormatter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -43,13 +44,13 @@ class WorkEntryFormViewModel(
     }
 
     fun onSalaryChange(salary: String) {
-        val value = salary.toLongOrNull() ?: 0L
-        _formState.value = _formState.value.copy(salary = value)
+        val value = CurrencyInputFormatter.parseToLong(salary) ?: 0L
+        _formState.value = _formState.value.copy(salary = value, salaryInput = salary)
     }
 
     fun onPaidAmountChange(amount: String) {
-        val value = amount.toLongOrNull() ?: 0L
-        _formState.value = _formState.value.copy(paidAmount = value)
+        val value = CurrencyInputFormatter.parseToLong(amount) ?: 0L
+        _formState.value = _formState.value.copy(paidAmount = value, paidAmountInput = amount)
     }
 
     fun onNotesChange(notes: String) {
@@ -94,8 +95,10 @@ class WorkEntryFormViewModel(
             breakMinutes = entry.breakMinutes,
             task = entry.task,
             salary = entry.salary,
+            salaryInput = CurrencyInputFormatter.formatForDisplay(entry.salary),
             isPaid = entry.isPaid,
             paidAmount = entry.paidAmount,
+            paidAmountInput = CurrencyInputFormatter.formatForDisplay(entry.paidAmount),
             notes = entry.notes
         )
     }
@@ -112,7 +115,9 @@ class WorkEntryFormViewModel(
         val breakMinutes: Int = 0,
         val task: String = "",
         val salary: Long = 0L,
+        val salaryInput: String = "",
         val paidAmount: Long = 0L,
+        val paidAmountInput: String = "",
         val isPaid: Boolean = false,
         val notes: String = "",
         val error: String? = null

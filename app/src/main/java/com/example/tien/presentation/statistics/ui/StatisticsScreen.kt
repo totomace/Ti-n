@@ -28,6 +28,8 @@ import com.example.tien.presentation.statistics.WeekStat
 import com.example.tien.presentation.statistics.YearStat
 import com.example.tien.ui.theme.PrimaryBlue
 import com.example.tien.ui.theme.AccentGreen
+import com.example.tien.util.CurrencyInputFormatter
+import com.example.tien.util.CurrencyVisualTransformation
 import java.text.NumberFormat
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -376,9 +378,13 @@ fun PaymentDialog(
     onDismiss: () -> Unit,
     onConfirm: (Long) -> Unit
 ) {
-    var paidAmountText by remember { mutableStateOf(entry.paidAmount.toString()) }
+    var paidAmountText by remember { 
+        mutableStateOf(
+            if (entry.paidAmount == 0L) "" else CurrencyInputFormatter.formatForDisplay(entry.paidAmount)
+        )
+    }
     val formatter = NumberFormat.getNumberInstance(Locale("vi", "VN"))
-    val remaining = entry.salary - (paidAmountText.toLongOrNull() ?: 0L)
+    val remaining = entry.salary - (CurrencyInputFormatter.parseToLong(paidAmountText) ?: 0L)
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -405,6 +411,7 @@ fun PaymentDialog(
                     onValueChange = { paidAmountText = it },
                     label = { Text("Số tiền đã trả") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    visualTransformation = CurrencyVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(),
                     suffix = { Text("VNĐ") },
                     colors = OutlinedTextFieldDefaults.colors(
@@ -443,7 +450,7 @@ fun PaymentDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    val amount = paidAmountText.toLongOrNull() ?: 0L
+                    val amount = CurrencyInputFormatter.parseToLong(paidAmountText) ?: 0L
                     onConfirm(amount)
                 }
             ) {

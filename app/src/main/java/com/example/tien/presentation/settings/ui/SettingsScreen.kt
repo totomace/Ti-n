@@ -3,14 +3,11 @@ package com.example.tien.presentation.settings.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.SettingsBrightness
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,6 +34,8 @@ fun SettingsScreen(
 ) {
     val currentTheme by viewModel.themeMode.collectAsState()
     var showThemeDialog by remember { mutableStateOf(false) }
+    var showComingSoonDialog by remember { mutableStateOf(false) }
+    var comingSoonFeature by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -54,36 +53,250 @@ fun SettingsScreen(
             )
         }
     ) { padding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding),
+            contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             // Appearance Section
-            Text(
-                "Giao diện",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-            )
+            item {
+                Text(
+                    "Giao diện",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFFD97706),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                )
+            }
 
-            SettingItem(
-                icon = Icons.Filled.SettingsBrightness,
-                title = "Chế độ hiển thị",
-                subtitle = when (currentTheme) {
-                    ThemeMode.LIGHT -> "Chế độ sáng"
-                    ThemeMode.DARK -> "Chế độ tối"
-                    ThemeMode.SYSTEM -> "Theo hệ thống"
-                },
-                onClick = { showThemeDialog = true }
-            )
+            item {
+                SettingItem(
+                    icon = Icons.Filled.SettingsBrightness,
+                    title = "Chế độ hiển thị",
+                    subtitle = when (currentTheme) {
+                        ThemeMode.LIGHT -> "Chế độ sáng"
+                        ThemeMode.DARK -> "Chế độ tối"
+                        ThemeMode.SYSTEM -> "Theo hệ thống"
+                    },
+                    onClick = { showThemeDialog = true }
+                )
+            }
 
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
 
-            // Future settings sections can be added here
-            // Text("Khác", fontSize = 14.sp, ...)
-            // SettingItem(...)
+            // Currency & Format Section
+            item {
+                Text(
+                    "Tiền tệ & Định dạng",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFFD97706),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                )
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.AttachMoney,
+                    title = "Đơn vị tiền tệ",
+                    subtitle = "VNĐ",
+                    onClick = { 
+                        comingSoonFeature = "Đơn vị tiền tệ"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.FormatListNumbered,
+                    title = "Định dạng số",
+                    subtitle = "1.000.000",
+                    onClick = { 
+                        comingSoonFeature = "Định dạng số"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            // Date & Time Section
+            item {
+                Text(
+                    "Ngày giờ",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFFD97706),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                )
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.CalendarToday,
+                    title = "Định dạng ngày",
+                    subtitle = "DD/MM/YYYY",
+                    onClick = { 
+                        comingSoonFeature = "Định dạng ngày"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.Event,
+                    title = "Ngày bắt đầu tuần",
+                    subtitle = "Thứ Hai",
+                    onClick = { 
+                        comingSoonFeature = "Ngày bắt đầu tuần"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            // Notifications Section
+            item {
+                Text(
+                    "Thông báo",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFFD97706),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                )
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.Notifications,
+                    title = "Nhắc nhở công việc",
+                    subtitle = "Tắt",
+                    onClick = { 
+                        comingSoonFeature = "Nhắc nhở công việc"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.NotificationsActive,
+                    title = "Nhắc thanh toán",
+                    subtitle = "Tắt",
+                    onClick = { 
+                        comingSoonFeature = "Nhắc thanh toán"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            // Backup & Restore Section
+            item {
+                Text(
+                    "Sao lưu & Khôi phục",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFFD97706),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                )
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.CloudUpload,
+                    title = "Xuất dữ liệu",
+                    subtitle = "Lưu file backup",
+                    onClick = { 
+                        comingSoonFeature = "Xuất dữ liệu"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.CloudDownload,
+                    title = "Nhập dữ liệu",
+                    subtitle = "Khôi phục từ file",
+                    onClick = { 
+                        comingSoonFeature = "Nhập dữ liệu"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            // About Section
+            item {
+                Text(
+                    "Thông tin",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFFD97706),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                )
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.Info,
+                    title = "Về ứng dụng",
+                    subtitle = "Phiên bản 1.0.0",
+                    onClick = { 
+                        comingSoonFeature = "Về ứng dụng"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+
+            item {
+                SettingItem(
+                    icon = Icons.Filled.BugReport,
+                    title = "Báo lỗi",
+                    subtitle = "Gửi phản hồi",
+                    onClick = { 
+                        comingSoonFeature = "Báo lỗi"
+                        showComingSoonDialog = true 
+                    }
+                )
+            }
         }
 
         if (showThemeDialog) {
@@ -94,6 +307,13 @@ fun SettingsScreen(
                     showThemeDialog = false
                 },
                 onDismiss = { showThemeDialog = false }
+            )
+        }
+
+        if (showComingSoonDialog) {
+            ComingSoonDialog(
+                featureName = comingSoonFeature,
+                onDismiss = { showComingSoonDialog = false }
             )
         }
     }
@@ -275,4 +495,73 @@ fun ThemeOptionItem(
             }
         }
     }
+}
+
+@Composable
+fun ComingSoonDialog(
+    featureName: String,
+    onDismiss: () -> Unit
+) {
+    val scale = remember { Animatable(0.8f) }
+    val alpha = remember { Animatable(0f) }
+    
+    LaunchedEffect(Unit) {
+        launch { scale.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy)) }
+        launch { alpha.animateTo(1f, tween(300)) }
+    }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.graphicsLayer {
+            scaleX = scale.value
+            scaleY = scale.value
+            this.alpha = alpha.value
+        },
+        containerColor = Color(0xFFFFFBF0),
+        shape = RoundedCornerShape(16.dp),
+        icon = {
+            Icon(
+                Icons.Filled.Build,
+                contentDescription = null,
+                tint = Color(0xFFFBBF24),
+                modifier = Modifier.size(48.dp)
+            )
+        },
+        title = {
+            Text(
+                "Đang phát triển",
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFD97706)
+            )
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "Tính năng \"$featureName\" đang được phát triển và sẽ có mặt trong phiên bản tiếp theo.",
+                    color = Color(0xFF92400E),
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    "Cảm ơn bạn đã quan tâm! 🙏",
+                    color = Color(0xFFB45309),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFBBF24)
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Đã hiểu", fontWeight = FontWeight.Bold)
+            }
+        }
+    )
 }

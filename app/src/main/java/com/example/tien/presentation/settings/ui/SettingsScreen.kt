@@ -633,7 +633,7 @@ fun AboutDialog(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    AboutInfoRow(Icons.Filled.Code, "Phát triển bởi: Bạn")
+                    AboutInfoRow(Icons.Filled.Code, "Phát triển bởi: Kiệt")
                     AboutInfoRow(Icons.Filled.CalendarToday, "Năm phát hành: 2026")
                     AboutInfoRow(Icons.Filled.Android, "Nền tảng: Android")
                 }

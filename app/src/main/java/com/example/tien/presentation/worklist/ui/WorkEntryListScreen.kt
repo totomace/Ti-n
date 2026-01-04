@@ -605,7 +605,7 @@ fun WorkEntryCard(entry: WorkEntry, onEdit: () -> Unit, onDelete: () -> Unit) {
                     NumberFormat.getNumberInstance(Locale("vi", "VN")).format(entry.salary) + " VNĐ",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = if (entry.paidAmount >= entry.salary) AccentGreen else PrimaryBlue
+                    color = Color(0xFF15803D)
                 )
             }
         }

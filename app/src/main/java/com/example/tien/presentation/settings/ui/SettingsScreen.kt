@@ -35,6 +35,7 @@ fun SettingsScreen(
     val currentTheme by viewModel.themeMode.collectAsState()
     var showThemeDialog by remember { mutableStateOf(false) }
     var showComingSoonDialog by remember { mutableStateOf(false) }
+    var showAboutDialog by remember { mutableStateOf(false) }
     var comingSoonFeature by remember { mutableStateOf("") }
 
     Scaffold(
@@ -275,10 +276,7 @@ fun SettingsScreen(
                     icon = Icons.Filled.Info,
                     title = "Về ứng dụng",
                     subtitle = "Phiên bản 1.0.0",
-                    onClick = { 
-                        comingSoonFeature = "Về ứng dụng"
-                        showComingSoonDialog = true 
-                    }
+                    onClick = { showAboutDialog = true }
                 )
             }
 
@@ -314,6 +312,12 @@ fun SettingsScreen(
             ComingSoonDialog(
                 featureName = comingSoonFeature,
                 onDismiss = { showComingSoonDialog = false }
+            )
+        }
+
+        if (showAboutDialog) {
+            AboutDialog(
+                onDismiss = { showAboutDialog = false }
             )
         }
     }
@@ -564,4 +568,126 @@ fun ComingSoonDialog(
             }
         }
     )
+}
+
+@Composable
+fun AboutDialog(
+    onDismiss: () -> Unit
+) {
+    val scale = remember { Animatable(0.8f) }
+    val alpha = remember { Animatable(0f) }
+    
+    LaunchedEffect(Unit) {
+        launch { scale.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy)) }
+        launch { alpha.animateTo(1f, tween(300)) }
+    }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.graphicsLayer {
+            scaleX = scale.value
+            scaleY = scale.value
+            this.alpha = alpha.value
+        },
+        containerColor = Color(0xFFFFFBF0),
+        shape = RoundedCornerShape(16.dp),
+        icon = {
+            Icon(
+                Icons.Filled.Info,
+                contentDescription = null,
+                tint = Color(0xFFFBBF24),
+                modifier = Modifier.size(48.dp)
+            )
+        },
+        title = {
+            Text(
+                "Công Việc Của Tôi",
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFD97706),
+                fontSize = 20.sp
+            )
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    "Phiên bản 1.0.0",
+                    color = Color(0xFF92400E),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                
+                Spacer(modifier = Modifier.height(4.dp))
+                
+                Text(
+                    "Ứng dụng quản lý công việc và thu nhập cá nhân",
+                    color = Color(0xFFB45309),
+                    fontSize = 14.sp,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                HorizontalDivider(
+                    color = Color(0xFFFBBF24).copy(alpha = 0.3f),
+                    thickness = 1.dp
+                )
+                
+                Spacer(modifier = Modifier.height(4.dp))
+                
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    InfoRow(icon = Icons.Filled.Check, text = "Quản lý lịch sử công việc")
+                    InfoRow(icon = Icons.Filled.Check, text = "Theo dõi thu nhập")
+                    InfoRow(icon = Icons.Filled.Check, text = "Thống kê chi tiết")
+                    InfoRow(icon = Icons.Filled.Check, text = "Ghi chú nhanh")
+                    InfoRow(icon = Icons.Filled.Check, text = "Chế độ sáng/tối")
+                }
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                Text(
+                    "© 2026 - Made with ❤️",
+                    color = Color(0xFFB45309),
+                    fontSize = 12.sp
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFBBF24)
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Đóng", fontWeight = FontWeight.Bold)
+            }
+        }
+    )
+}
+
+@Composable
+fun InfoRow(icon: ImageVector, text: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(vertical = 4.dp)
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = Color(0xFF15803D),
+            modifier = Modifier.size(18.dp)
+        )
+        Text(
+            text,
+            color = Color(0xFF92400E),
+            fontSize = 13.sp
+        )
+    }
 }

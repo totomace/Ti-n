@@ -158,23 +158,41 @@ fun WorkEntryApp() {
                 )
             }
             "stats" -> {
-                BackHandler { currentScreen = "list" }
+                BackHandler { 
+                    listViewModel.loadEntries()
+                    currentScreen = "list" 
+                }
                 StatisticsScreen(
                     viewModel = statsViewModel,
-                    onBackClick = { currentScreen = "list" }
+                    onBackClick = { 
+                        listViewModel.loadEntries()
+                        currentScreen = "list" 
+                    }
                 )
             }
             "settings" -> {
-                BackHandler { currentScreen = "list" }
+                BackHandler { 
+                    listViewModel.loadEntries()
+                    currentScreen = "list" 
+                }
                 SettingsScreen(
                     viewModel = settingsViewModel,
-                    onBackClick = { currentScreen = "list" }
+                    onBackClick = { 
+                        listViewModel.loadEntries()
+                        currentScreen = "list" 
+                    }
                 )
             }
             "notes" -> {
-                BackHandler { currentScreen = "list" }
+                BackHandler { 
+                    listViewModel.loadEntries()
+                    currentScreen = "list" 
+                }
                 com.example.tien.presentation.notes.ui.NotesScreen(
-                    onBack = { currentScreen = "list" }
+                    onBack = { 
+                        listViewModel.loadEntries()
+                        currentScreen = "list" 
+                    }
                 )
             }
         }
